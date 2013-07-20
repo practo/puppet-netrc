@@ -6,18 +6,24 @@ module Netrc =
   let indent = del /[ \t]+/ "  "
   let ws     = del /[ \t]+/ " "
   let ows    = del /[ \t]*/ ""
-  let eol    = del /[ \t]*\n/ "\n"
+  let eol    = del /\n/ "\n"
+  let ws_eol = del /[ \t]*\n/ "\n"
   let val    = store /[^ \t\n]+/
 
-  let machine = [ key "machine" . ws . val . eol]
+  let comment = [ key "#" . store /[^\n]*/ . eol ]
 
-  let entry (kw:string) = [ indent . key kw . ws . val . eol ]
+  let machine = [ key "machine" . ws . val . ws_eol]
+
+  let entry (kw:string) = [ indent . key kw . ws . val . ws_eol ]
 
   (* Define entries *)
   let attributes = entry "login"
                  | entry "password"
 
-  let entries = machine . attributes+
+  let section = machine . attributes+
+
+  let entries = section
+              | comment
 
   (* Define record *)
   let record = [ seq "record" . entries ]

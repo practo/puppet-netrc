@@ -6,6 +6,11 @@ module Test_netrc =
 machine example.org
   login admin
   password 12345
+
+#this is a comment
+machine m
+  login l
+  password p
 "
 
   test Netrc.lns get conf =
@@ -18,3 +23,10 @@ machine example.org
       { "machine"  = "example.org" }
       { "login"    = "admin" }
       { "password" = "12345" } }
+    { }
+    { "3"
+      { "#" = "this is a comment" } }
+    { "4"
+      { "machine"  = "m" }
+      { "login"    = "l" }
+      { "password" = "p" } }
