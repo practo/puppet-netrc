@@ -5,31 +5,24 @@ module Netrc =
   let empty  = [ del /\n/ "\n" ]
   let indent = del /[ \t]+/ "  "
   let ws     = del /[ \t]+/ " "
-  let ows    = del /[ \t]*/ ""
   let eol    = del /\n/ "\n"
   let ws_eol = del /[ \t]*\n/ "\n"
   let val    = store /[^ \t\n]+/
 
   let comment = [ key "#" . store /[^\n]*/ . eol ]
-
-  let machine = [ key "machine" . ws . val . ws_eol]
+  let machine = del /machine[ \t]+/ "machine " . key /[^ \t\n\/#]+/ . ws_eol
 
   let entry (kw:string) = [ indent . key kw . ws . val . ws_eol ]
 
   (* Define entries *)
-  let attributes = entry "login"
-                 | entry "password"
-
-  let section = machine . attributes+
-
-  let entries = section
-              | comment
+  let entries = entry "login"
+              | entry "password"
 
   (* Define record *)
-  let record = [ label "node" . entries ]
+  let record = [ machine .  entries+ ]
 
   (* Define lens *)
-  let lns = ( record | empty)*
+  let lns = ( record | empty | comment)*
 
   let filter = incl "/home/*/.netrc"
              . Util.stdexcl
