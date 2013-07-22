@@ -31,7 +31,7 @@ module Netrc =
   (* Define lens *)
   let lns = ( record | empty)*
 
-  let filter = incl (Sys.getenv("HOME") . "/.netrc")
+  let filter = incl "/home/*/.netrc"
              . Util.stdexcl
 
   let xfm = transform lns filter
