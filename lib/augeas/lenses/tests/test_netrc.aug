@@ -14,19 +14,19 @@ machine m
 "
 
   test Netrc.lns get conf =
-    { "1"
+    { "node"
       { "machine"  = "example.com" }
       { "login"    = "root" }
       { "password" = "yolo" } }
     { }
-    { "2"
+    { "node"
       { "machine"  = "example.org" }
       { "login"    = "admin" }
       { "password" = "12345" } }
     { }
-    { "3"
+    { "node"
       { "#" = "this is a comment" } }
-    { "4"
+    { "node"
       { "machine"  = "m" }
       { "login"    = "l" }
       { "password" = "p" } }

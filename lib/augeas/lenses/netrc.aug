@@ -26,7 +26,7 @@ module Netrc =
               | comment
 
   (* Define record *)
-  let record = [ seq "record" . entries ]
+  let record = [ label "node" . entries ]
 
   (* Define lens *)
   let lns = ( record | empty)*
