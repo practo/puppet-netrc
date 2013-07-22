@@ -11,14 +11,14 @@ describe 'netrc' do
   }}
 
   it do
-    should contain_augeas('Add example.com netrc entry').
-      with :lens => 'Netrc',
+    should contain_augeas("Add #{title} netrc entry for #{user}").
+      with :lens => 'Netrc.lns',
            :incl => '/home/root/.netrc',
            :context => '/files/home/root/.netrc',
            :changes => [
-             "set *[machine = 'example.com']/machine example.com",
-             "set *[machine = 'example.com']/login root",
-             "set *[machine = 'example.com']/password yolo",
+             "ins #{title} after *[last()]",
+             "set #{title}/login #{user}",
+             "set #{title}/password #{password}",
            ]
   end
 
