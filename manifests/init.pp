@@ -14,19 +14,12 @@ define netrc(
   }
 
   augeas {
-    "Add ${machine} netrc entry for ${user}":
-      changes => [
-        "ins ${machine} after *[last()]",
-        "set ${machine}/login ${login}",
-        "set ${machine}/password ${password}",
-      ],
-      onlyif => "match ${machine} size == 0";
-    "Update ${machine} netrc entry for ${user}":
-      changes => [
-        "set ${machine}/login ${login}",
-        "set ${machine}/password ${password}",
-      ],
-      onlyif => "match ${machine} size == 1";
+    "Set ${machine} netrc login for ${user}":
+      changes => "set ${machine}/login ${login}",
+      onlyif  => "match ${machine}[login='${login}']/login size == 0";
+    "Set ${machine} netrc password for ${user}":
+      changes => "set ${machine}/password ${password}",
+      onlyif  => "match ${machine}[password='${password}']/password size == 0";
   }
 
 }

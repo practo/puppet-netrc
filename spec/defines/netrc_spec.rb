@@ -11,15 +11,19 @@ describe 'netrc' do
   }}
 
   it do
-    should contain_augeas("Add #{title} netrc entry for #{user}").
-      with :lens => 'Netrc.lns',
-           :incl => '/home/root/.netrc',
+    should contain_augeas("Set #{title} netrc login for #{user}").
+      with :lens    => 'Netrc.lns',
+           :incl    => '/home/root/.netrc',
            :context => '/files/home/root/.netrc',
-           :changes => [
-             "ins #{title} after *[last()]",
-             "set #{title}/login #{user}",
-             "set #{title}/password #{password}",
-           ]
+           :changes => "set #{title}/login #{user}",
+           :onlyif  => "match #{title}[login='#{user}']/login size == 0"
+
+    should contain_augeas("Set #{title} netrc password for #{user}").
+      with :lens    => 'Netrc.lns',
+           :incl    => '/home/root/.netrc',
+           :context => '/files/home/root/.netrc',
+           :changes => "set #{title}/password #{password}",
+           :onlyif  => "match #{title}[password='#{password}']/password size == 0"
   end
 
 end
