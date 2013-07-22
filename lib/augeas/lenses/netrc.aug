@@ -19,7 +19,7 @@ module Netrc =
               | entry "password"
 
   (* Define record *)
-  let record = [ machine .  entries+ ]
+  let record = [ machine . entries* ]
 
   (* Define lens *)
   let lns = ( record | empty | comment)*
