@@ -7,6 +7,11 @@ define netrc(
   $file    = "/home/${user}/.netrc",
 ) {
 
+  class { 'netrc::setup':
+    file => $file,
+    user => $user,
+  }
+
   Augeas {
     lens    => 'Netrc.lns',
     incl    => $file,
@@ -22,12 +27,6 @@ define netrc(
       changes => "set ${machine}/password ${password}",
       onlyif  => "match ${machine}[password='${password}']/password size == 0",
       before  => File[$file];
-  }
-
-  file { $file:
-    mode  => '0600',
-    owner => $user,
-    group => $user,
   }
 
 }
