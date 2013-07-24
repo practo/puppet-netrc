@@ -7,11 +7,6 @@ define netrc(
   $file    = "/home/${user}/.netrc",
 ) {
 
-  class { 'netrc::setup':
-    file => $file,
-    user => $user,
-  }
-
   Augeas {
     lens    => 'Netrc.lns',
     incl    => $file,
@@ -28,5 +23,7 @@ define netrc(
       onlyif  => "match ${machine}[password='${password}']/password size == 0",
       before  => File[$file];
   }
+
+  ensure_resource('file', $file, {'mode' => '0600', 'owner' => $user, 'group' => $user})
 
 }
