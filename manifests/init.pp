@@ -16,10 +16,18 @@ define netrc(
   augeas {
     "Set ${machine} netrc login for ${user}":
       changes => "set ${machine}/login ${login}",
-      onlyif  => "match ${machine}[login='${login}']/login size == 0";
+      onlyif  => "match ${machine}[login='${login}']/login size == 0",
+      before  => File[$file];
     "Set ${machine} netrc password for ${user}":
       changes => "set ${machine}/password ${password}",
-      onlyif  => "match ${machine}[password='${password}']/password size == 0";
+      onlyif  => "match ${machine}[password='${password}']/password size == 0",
+      before  => File[$file];
+  }
+
+  file { $file:
+    mode  => '0600',
+    owner => $user,
+    group => $user,
   }
 
 }

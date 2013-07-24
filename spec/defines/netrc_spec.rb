@@ -16,14 +16,21 @@ describe 'netrc' do
            :incl    => '/home/root/.netrc',
            :context => '/files/home/root/.netrc',
            :changes => "set #{title}/login #{user}",
-           :onlyif  => "match #{title}[login='#{user}']/login size == 0"
+           :onlyif  => "match #{title}[login='#{user}']/login size == 0",
+           :before  => "File[/home/root/.netrc]"
 
     should contain_augeas("Set #{title} netrc password for #{user}").
       with :lens    => 'Netrc.lns',
            :incl    => '/home/root/.netrc',
            :context => '/files/home/root/.netrc',
            :changes => "set #{title}/password #{password}",
-           :onlyif  => "match #{title}[password='#{password}']/password size == 0"
+           :onlyif  => "match #{title}[password='#{password}']/password size == 0",
+           :before  => "File[/home/root/.netrc]"
+
+    should contain_file("/home/root/.netrc").
+      with :mode  => '0600',
+           :owner => 'root',
+           :group => 'root'
   end
 
 end
