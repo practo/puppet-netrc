@@ -13,6 +13,9 @@ define netrc(
     user => $user,
   }
 
+  class {'netrc::augeas':
+  }
+
   Augeas {
     lens    => 'Netrc.lns',
     incl    => $file,
