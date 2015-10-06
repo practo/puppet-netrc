@@ -1,10 +1,11 @@
 define netrc(
+  $sysuser,
   $user,
   $password,
 
   $machine = $name,
   $login   = $user,
-  $file    = "/home/${user}/.netrc",
+  $file    = "/home/${sysuser}/.netrc",
 ) {
 
   class { 'netrc::setup':
@@ -19,11 +20,11 @@ define netrc(
   }
 
   augeas {
-    "Set ${machine} netrc login for ${user}":
+    "Set ${machine} netrc login for ${sysuser}":
       changes => "set ${machine}/login ${login}",
       onlyif  => "match ${machine}[login='${login}']/login size == 0",
       before  => File[$file];
-    "Set ${machine} netrc password for ${user}":
+    "Set ${machine} netrc password for ${sysuser}":
       changes => "set ${machine}/password ${password}",
       onlyif  => "match ${machine}[password='${password}']/password size == 0",
       before  => File[$file];
